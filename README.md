@@ -171,12 +171,24 @@ Notes:
 - **Auth is simplified per the brief:** a single demo operator owns the forms, and the builder + analytics are gated by a shared **admin passcode** (`ADMIN_TOKEN`, sent as the `x-admin-token` header; enter it once on the unlock screen). Public form-filling at `/forms/[slug]` stays anonymous. Swap in real per-user auth later if needed.
 - The **Scalar viewer** at `/docs` loads its bundle from a CDN at runtime; the OpenAPI JSON itself is served by the app.
 
+## 🚀 Live demo
+
+- **App:** https://formos-beta.vercel.app
+- **API docs (Scalar):** https://formos-beta.vercel.app/docs
+- **Example form:** https://formos-beta.vercel.app/forms/chaicode-cohort-onboarding
+- **Source:** https://github.com/himanshu748/FormOS
+
+Hosted on **Vercel** (Next.js) + **Supabase** (PostgreSQL via the IPv4 transaction pooler).
+The builder & analytics are behind an admin passcode (`ADMIN_TOKEN`); public form-filling is open.
+
+> Built for the ChaiCode **#ChaiForms** challenge. _(Add your X/demo links here.)_
+
 ## 🚢 Deploy
 
 `apps/web` is a standard Next.js app and deploys cleanly to any Node host (e.g. Vercel) with a
-managed PostgreSQL `DATABASE_URL` and `NEXT_PUBLIC_APP_URL` set.
-
-> Live demo: _add your deployed URL here once hosted._
+managed PostgreSQL `DATABASE_URL`, `NEXT_PUBLIC_APP_URL`, and `ADMIN_TOKEN` set. For a pnpm
+monorepo, set the Vercel **Root Directory** to `apps/web` and deploy from Git (Vercel includes
+the workspace automatically).
 
 ## License
 
