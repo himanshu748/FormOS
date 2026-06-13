@@ -91,7 +91,8 @@ pnpm install
 
 # 2. Configure environment
 cp .env.example .env
-#   (the defaults match docker-compose.yml — no edits needed for local dev)
+#   (DB defaults match docker-compose.yml. Set ADMIN_TOKEN to any passcode —
+#    you'll enter it once to unlock the builder/analytics.)
 
 # 3. Start PostgreSQL
 docker compose up -d
@@ -167,7 +168,7 @@ What's been verified in this repo:
 Notes:
 
 - **Live PostgreSQL** is exercised via the steps above on your machine (Docker). The repo ships the migration + seed so a clean machine reaches a working app with `migrate → seed → dev`.
-- **Auth is intentionally simplified** (a single demo operator) — easy to swap for real auth later.
+- **Auth is simplified per the brief:** a single demo operator owns the forms, and the builder + analytics are gated by a shared **admin passcode** (`ADMIN_TOKEN`, sent as the `x-admin-token` header; enter it once on the unlock screen). Public form-filling at `/forms/[slug]` stays anonymous. Swap in real per-user auth later if needed.
 - The **Scalar viewer** at `/docs` loads its bundle from a CDN at runtime; the OpenAPI JSON itself is served by the app.
 
 ## 🚢 Deploy

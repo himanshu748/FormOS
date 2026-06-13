@@ -1,3 +1,4 @@
+import { AdminGate } from "@/components/admin-gate";
 import { Editor } from "@/components/editor/editor";
 
 export default async function EditorPage({
@@ -6,5 +7,9 @@ export default async function EditorPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <Editor id={id} />;
+  return (
+    <AdminGate>
+      <Editor id={id} />
+    </AdminGate>
+  );
 }

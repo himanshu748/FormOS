@@ -1,4 +1,4 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { ZodError } from "zod";
 import type { Context } from "./context";
@@ -32,9 +32,27 @@ const t = initTRPC
   });
 
 export const router = t.router;
-export const publicProcedure = t.procedure;
 export const middleware = t.middleware;
 export const createCallerFactory = t.createCallerFactory;
+
+/** Open to anyone — used for public form-filling (bySlug, view.track, submit). */
+export const publicProcedure = t.procedure;
+
+/**
+ * Requires the shared admin passcode (ADMIN_TOKEN) via the `x-admin-token`
+ * header. Used for all form management and analytics. If ADMIN_TOKEN is not
+ * configured, access is denied by default (fail closed).
+ */
+export const protectedProcedure = t.procedure.use(function isAdmin({ ctx, next }) {
+  const expected = process.env.ADMIN_TOKEN;
+  if (!expected || !ctx.adminToken || ctx.adminToken !== expected) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Admin passcode required.",
+    });
+  }
+  return next();
+});
 
 export type { Context };
 export type { inferRouterInputs, inferRouterOutputs };

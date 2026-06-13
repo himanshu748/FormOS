@@ -1,3 +1,4 @@
+import { AdminGate } from "@/components/admin-gate";
 import { AnalyticsView } from "@/components/analytics-view";
 
 export default async function AnalyticsPage({
@@ -6,5 +7,9 @@ export default async function AnalyticsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <AnalyticsView formId={id} />;
+  return (
+    <AdminGate>
+      <AnalyticsView formId={id} />
+    </AdminGate>
+  );
 }

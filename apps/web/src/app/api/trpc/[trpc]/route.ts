@@ -11,7 +11,7 @@ function handler(req: Request) {
     endpoint: "/api/trpc",
     req,
     router: appRouter,
-    createContext,
+    createContext: () => createContext({ headers: req.headers }),
     onError({ error, path }) {
       if (process.env.NODE_ENV === "development") {
         console.error(`[tRPC] ${path ?? "<no-path>"}:`, error.message);

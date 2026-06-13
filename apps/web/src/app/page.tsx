@@ -1,5 +1,10 @@
+import { AdminGate } from "@/components/admin-gate";
 import { DesktopDashboard } from "@/components/desktop-dashboard";
 
 export default function HomePage() {
-  return <DesktopDashboard />;
+  return (
+    <AdminGate>
+      <DesktopDashboard />
+    </AdminGate>
+  );
 }

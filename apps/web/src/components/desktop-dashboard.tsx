@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Badge, Button, Spinner, Window } from "@formos/ui";
 import type { RouterOutputs } from "@formos/api";
 import { trpc } from "@/lib/trpc/react";
+import { clearAdminToken } from "@/lib/admin";
 import { formatDateTime, formatNumber } from "@/lib/format";
 import { StatePanel } from "@/components/state-panel";
 import { ShareDialog } from "@/components/share-dialog";
@@ -124,6 +125,17 @@ export function DesktopDashboard() {
               ⟳ Refresh
             </Button>
             {list.isFetching && <Spinner />}
+            <span className="toolbar__spacer" />
+            <Button
+              variant="ghost"
+              onClick={() => {
+                clearAdminToken();
+                window.location.reload();
+              }}
+              title="Lock the admin area"
+            >
+              🔒 Lock
+            </Button>
           </div>
 
           {list.isLoading ? (

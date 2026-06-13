@@ -15,7 +15,7 @@ import type { Context } from "../context";
 import { getOrCreateDemoUser } from "../demo-user";
 import { serializeForm } from "../serializers";
 import { uniqueSlug } from "../slug";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 async function loadOwnedForm(ctx: Context, id: string) {
   const user = await getOrCreateDemoUser(ctx.db);
@@ -31,8 +31,9 @@ async function loadOwnedForm(ctx: Context, id: string) {
 }
 
 export const formRouter = router({
-  list: publicProcedure
-    .meta({ openapi: { summary: "List the operator's forms", tags: ["forms"] } })
+  // --- Management (admin-only) --------------------------------------------
+  list: protectedProcedure
+    .meta({ openapi: { summary: "List the operator's forms (admin)", tags: ["forms"] } })
     .query(async ({ ctx }) => {
       const user = await getOrCreateDemoUser(ctx.db);
       const rows = await ctx.db
@@ -69,37 +70,13 @@ export const formRouter = router({
       }));
     }),
 
-  byId: publicProcedure
-    .meta({ openapi: { summary: "Get a form by id (for the editor)", tags: ["forms"] } })
+  byId: protectedProcedure
+    .meta({ openapi: { summary: "Get a form by id, for the editor (admin)", tags: ["forms"] } })
     .input(z.object({ id: z.string().uuid() }))
     .query(async ({ ctx, input }) => serializeForm(await loadOwnedForm(ctx, input.id))),
 
-  bySlug: publicProcedure
-    .meta({
-      openapi: {
-        summary: "Get a published form by slug (public)",
-        description: "Returns a form only if it is published. Used by the public fill page.",
-        tags: ["forms", "public"],
-      },
-    })
-    .input(z.object({ slug: z.string().min(1) }))
-    .query(async ({ ctx, input }) => {
-      const [form] = await ctx.db
-        .select()
-        .from(forms)
-        .where(eq(forms.slug, input.slug))
-        .limit(1);
-      if (!form || form.status !== "published") {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "This form isn't published (or doesn't exist).",
-        });
-      }
-      return serializeForm(form);
-    }),
-
-  create: publicProcedure
-    .meta({ openapi: { summary: "Create a new draft form", tags: ["forms"] } })
+  create: protectedProcedure
+    .meta({ openapi: { summary: "Create a new draft form (admin)", tags: ["forms"] } })
     .input(z.object({ title: z.string().min(1).max(300).optional() }).optional())
     .mutation(async ({ ctx, input }) => {
       const user = await getOrCreateDemoUser(ctx.db);
@@ -115,8 +92,8 @@ export const formRouter = router({
       return serializeForm(created);
     }),
 
-  update: publicProcedure
-    .meta({ openapi: { summary: "Update a form's title, description, accent, or fields", tags: ["forms"] } })
+  update: protectedProcedure
+    .meta({ openapi: { summary: "Update a form's title, description, accent, or fields (admin)", tags: ["forms"] } })
     .input(
       z.object({
         id: z.string().uuid(),
@@ -145,8 +122,8 @@ export const formRouter = router({
       return serializeForm(updated);
     }),
 
-  publish: publicProcedure
-    .meta({ openapi: { summary: "Publish a form so it accepts responses", tags: ["forms"] } })
+  publish: protectedProcedure
+    .meta({ openapi: { summary: "Publish a form so it accepts responses (admin)", tags: ["forms"] } })
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       const form = await loadOwnedForm(ctx, input.id);
@@ -168,8 +145,8 @@ export const formRouter = router({
       return serializeForm(updated!);
     }),
 
-  unpublish: publicProcedure
-    .meta({ openapi: { summary: "Return a published form to draft", tags: ["forms"] } })
+  unpublish: protectedProcedure
+    .meta({ openapi: { summary: "Return a published form to draft (admin)", tags: ["forms"] } })
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       const form = await loadOwnedForm(ctx, input.id);
@@ -181,12 +158,37 @@ export const formRouter = router({
       return serializeForm(updated!);
     }),
 
-  remove: publicProcedure
-    .meta({ openapi: { summary: "Delete a form and all of its data", tags: ["forms"] } })
+  remove: protectedProcedure
+    .meta({ openapi: { summary: "Delete a form and all of its data (admin)", tags: ["forms"] } })
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       const form = await loadOwnedForm(ctx, input.id);
       await ctx.db.delete(forms).where(eq(forms.id, form.id));
       return { id: form.id };
+    }),
+
+  // --- Public --------------------------------------------------------------
+  bySlug: publicProcedure
+    .meta({
+      openapi: {
+        summary: "Get a published form by slug (public)",
+        description: "Returns a form only if it is published. Used by the public fill page.",
+        tags: ["forms", "public"],
+      },
+    })
+    .input(z.object({ slug: z.string().min(1) }))
+    .query(async ({ ctx, input }) => {
+      const [form] = await ctx.db
+        .select()
+        .from(forms)
+        .where(eq(forms.slug, input.slug))
+        .limit(1);
+      if (!form || form.status !== "published") {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "This form isn't published (or doesn't exist).",
+        });
+      }
+      return serializeForm(form);
     }),
 });

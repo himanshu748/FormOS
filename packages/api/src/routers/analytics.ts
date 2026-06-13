@@ -9,7 +9,7 @@ import {
   forms,
 } from "@formos/db";
 import type { Context } from "../context";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, router } from "../trpc";
 
 export type RatingBreakdown = {
   fieldId: string;
@@ -40,7 +40,7 @@ async function getForm(ctx: Context, id: string) {
 const formIdInput = z.object({ formId: z.string().uuid() });
 
 export const analyticsRouter = router({
-  overview: publicProcedure
+  overview: protectedProcedure
     .meta({ openapi: { summary: "Headline analytics for a form", tags: ["analytics"] } })
     .input(formIdInput)
     .query(async ({ ctx, input }) => {
@@ -79,7 +79,7 @@ export const analyticsRouter = router({
       };
     }),
 
-  fieldBreakdown: publicProcedure
+  fieldBreakdown: protectedProcedure
     .meta({ openapi: { summary: "Per-field analytics (rating / choice fields)", tags: ["analytics"] } })
     .input(formIdInput)
     .query(async ({ ctx, input }) => {
@@ -153,7 +153,7 @@ export const analyticsRouter = router({
       return { fields: result };
     }),
 
-  responses: publicProcedure
+  responses: protectedProcedure
     .meta({ openapi: { summary: "Paginated response table for a form", tags: ["analytics"] } })
     .input(
       formIdInput.extend({

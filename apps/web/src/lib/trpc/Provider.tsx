@@ -27,7 +27,14 @@ export function TRPCProvider({ children }: { children: ReactNode }) {
           enabled: (op) =>
             process.env.NODE_ENV === "development" && op.direction === "down",
         }),
-        httpBatchLink({ url: `${getBaseUrl()}/api/trpc` }),
+        httpBatchLink({
+          url: `${getBaseUrl()}/api/trpc`,
+          headers() {
+            if (typeof window === "undefined") return {};
+            const token = window.localStorage.getItem("formos_admin_token");
+            return token ? { "x-admin-token": token } : {};
+          },
+        }),
       ],
     }),
   );
