@@ -178,7 +178,7 @@ Notes:
 - **API docs (Scalar):** https://formos-beta.vercel.app/docs
 - **Example form:** https://formos-beta.vercel.app/forms/chaicode-cohort-onboarding
 - **Source:** https://github.com/himanshu748/FormOS
-- **Demo video + thread on X:** https://x.com/jhahimanshu653/status/2065798922375672090
+- **Demo video + thread on X:** https://x.com/jhahimanshu653/status/2065809978703613968
 
 Hosted on **Vercel** (Next.js) + **Supabase** (PostgreSQL via the IPv4 transaction pooler).
 The builder & analytics are behind an admin passcode (`ADMIN_TOKEN`); public form-filling is open.
