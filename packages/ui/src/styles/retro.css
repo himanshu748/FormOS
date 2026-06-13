@@ -69,6 +69,7 @@
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
+  min-width: 0;
 }
 .stack { display: flex; flex-direction: column; }
 .muted { color: var(--w-muted); }
@@ -430,11 +431,27 @@
 ::-webkit-scrollbar-corner { background: var(--w-light); }
 
 /* ---- responsive ----------------------------------------------------------- */
+.win { max-width: 100%; }
+.win__body { min-width: 0; }
+.toolbar { min-width: 0; }
+
 @media (max-width: 640px) {
-  .desktop { padding: 10px; padding-bottom: 60px; }
+  .desktop { padding: 10px; padding-bottom: 58px; }
   .win__body { padding: 12px; }
   .win__title { font-size: 12px; }
   .btn { padding: 7px 12px; }
   .hide-sm { display: none !important; }
   .desktop-icon { width: 78px; }
+  /* The pixel display font is wide — keep big stat numbers inside their tiles. */
+  .stat-tile__value { font-size: 13px; overflow-wrap: anywhere; }
+  .font-display { overflow-wrap: anywhere; }
+  .retro-table th,
+  .retro-table td { padding: 5px 7px; }
+}
+
+@media (max-width: 420px) {
+  .win__title { font-size: 11px; }
+  .btn { font-size: 12px; padding: 7px 10px; }
+  .toolbar { gap: 5px; }
+  .desktop-icon { width: 70px; }
 }
