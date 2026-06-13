@@ -174,14 +174,16 @@ Notes:
 ## 🚀 Live demo
 
 - **App:** https://formos-beta.vercel.app
+- **Try it / feedback form (uses all 8 field types):** https://formos-beta.vercel.app/forms/did-you-like-formos
 - **API docs (Scalar):** https://formos-beta.vercel.app/docs
 - **Example form:** https://formos-beta.vercel.app/forms/chaicode-cohort-onboarding
 - **Source:** https://github.com/himanshu748/FormOS
+- **Demo video + thread on X:** https://x.com/jhahimanshu653/status/2065798922375672090
 
 Hosted on **Vercel** (Next.js) + **Supabase** (PostgreSQL via the IPv4 transaction pooler).
 The builder & analytics are behind an admin passcode (`ADMIN_TOKEN`); public form-filling is open.
 
-> Built for the ChaiCode **#ChaiForms** challenge. _(Add your X/demo links here.)_
+> Built for the ChaiCode **#ChaiForms** challenge — a form builder on the restricted stack, built end-to-end (including the demo video) with Claude Opus 4.8.
 
 ## 🚢 Deploy
 
