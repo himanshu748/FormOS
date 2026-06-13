@@ -19,6 +19,9 @@ export function AdminGate({ children }: { children: ReactNode }) {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    // Allow seeding the passcode via ?key=... (handy for unlock links / capture).
+    const key = new URLSearchParams(window.location.search).get("key");
+    if (key) setAdminToken(key);
     setHadToken(!!getAdminToken());
     setReady(true);
   }, []);
