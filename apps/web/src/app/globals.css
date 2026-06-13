@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: var(--w-font, Tahoma, "Segoe UI", sans-serif);
+    color: var(--w-text, #0b0b0b);
+    background: var(--w-desktop, #128a8a);
+    min-height: 100dvh;
+  }
+  h1, h2, h3, h4 {
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; }
+  h3 { font-size: 14px; }
+  p { margin: 0; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+}
+
+/* The display font is used sparingly for the wordmark and big stat numbers. */
+.font-display {
+  font-family: var(--w-display, "Press Start 2P", Tahoma, sans-serif);
+}

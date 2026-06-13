@@ -1,0 +1,25 @@
+# Local PostgreSQL for FormOS.
+#   docker compose up -d
+# Connection string (see .env.example):
+#   postgresql://formos:formos@localhost:5432/formos
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: formos-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: formos
+      POSTGRES_PASSWORD: formos
+      POSTGRES_DB: formos
+    ports:
+      - "5432:5432"
+    volumes:
+      - formos-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U formos -d formos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  formos-db-data:

@@ -1,0 +1,26 @@
+{
+  "name": "@formos/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./openapi": "./src/openapi.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@formos/db": "workspace:*",
+    "@trpc/server": "^11.0.0",
+    "drizzle-orm": "^0.36.4",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@formos/config": "workspace:*",
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  }
+}
